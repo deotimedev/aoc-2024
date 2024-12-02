@@ -3,4 +3,5 @@
 .kotlin/
 build
 src/**/*.txt
+inputs
 local.properties
