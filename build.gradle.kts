@@ -13,3 +13,9 @@ tasks {
         gradleVersion = "8.11.1"
     }
 }
+
+kotlin {
+    compilerOptions {
+        freeCompilerArgs.add("-Xwhen-guards")
+    }
+}
