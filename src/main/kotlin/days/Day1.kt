@@ -1,6 +1,5 @@
 package days
 
-import Day
 import kotlin.math.abs
 
 object Day1 : Day {

@@ -1,7 +1,5 @@
 package days
 
-import Day
-
 object Day3 : Day {
     override val name = "Mull It Over"
 
