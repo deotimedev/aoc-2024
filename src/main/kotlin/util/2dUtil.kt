@@ -7,12 +7,12 @@ data class Point2(val x: Int, val y: Int) {
     operator fun plus(v: Vec2) =
         Point2(x + v.x, y + v.y)
 }
-data class Grid2(val x: Int, val y: Int) {
+data class Grid2(val x: Int, val y: Int) : Sequence<Point2> {
     init {
         require(x > 0 && y > 0) { "Grid is empty" }
     }
 
-    operator fun iterator() = iterator {
+    override fun iterator() = iterator {
         for (px in 0..(x - 1)) {
             for (py in 0..(y - 1)) {
                 yield(Point2(px, py))
@@ -24,14 +24,6 @@ data class Grid2(val x: Int, val y: Int) {
         p.x >= 0 && p.y >= 0 && p.x < x && p.y < y
 }
 
-fun <T> List<List<T>>.grid2(): Grid2 {
-    val y = size
-    val x = firstOrNull()?.size ?: 0
-    if (any { it.size != x }) throw IllegalArgumentException("Non-rectangular list")
-    return Grid2(x, y)
-}
-
-@JvmName("strGrid2")
 fun List<String>.grid2(): Grid2 {
     val y = size
     val x = firstOrNull()?.length ?: 0
@@ -39,5 +31,5 @@ fun List<String>.grid2(): Grid2 {
     return Grid2(x, y)
 }
 
-fun <T> List<List<T>>.at(p: Point2) =
-    this[size - p.y][p.x]
+fun List<String>.at(p: Point2) =
+    this[lastIndex - p.y][p.x]

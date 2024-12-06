@@ -21,3 +21,8 @@ fun String.md5() = BigInteger(1, MessageDigest.getInstance("MD5").digest(toByteA
  * The cleaner shorthand for printing output.
  */
 fun <T> T.println() = also { println(this) }
+
+fun <T> Sequence<T>.cycle() =
+    sequence {
+        while (true) yieldAll(this@cycle)
+    }
