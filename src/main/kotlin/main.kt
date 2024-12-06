@@ -1,5 +1,5 @@
 import days.Day
-import days.Day5
+import util.readInput
 import kotlin.time.measureTimedValue
 
 fun main() {

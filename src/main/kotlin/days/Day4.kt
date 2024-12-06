@@ -1,44 +1,38 @@
 package days
 
+import util.Point2
+import util.Vec2
+import util.grid2
+import util.println
+
 object Day4 : Day {
     override val name = "Ceres Search"
-
-    private data class Point(val row: Int, val col: Int)
-    private data class Dir(val dc: Int, val dr: Int)
-
-    private operator fun Point.plus(dir: Dir) =
-        Point(row + dir.dr, col + dir.dc)
-
-    private fun Point.inBounds(rMax: Int, cMax: Int) =
-        !(col < 0 || row < 0 || col > cMax || row > rMax)
-
-
+    
     override fun part1(input: List<String>): Int {
 
-        fun at(p: Point) = input[p.row][p.col]
 
-        val rMax = input.first().lastIndex
+        val grid = input.grid2()
         val cMax = input.lastIndex
+        println("${grid.x} ${cMax}")
+        fun at(p: Point2) = input[p.x][p.y]
 
-        fun test(p: Point, dir: Dir): Boolean {
+
+        fun test(p: Point2, dir: Vec2): Boolean {
             var cur = p
             for (letter in charArrayOf('M', 'A', 'S')) {
                 cur += dir
-                if (!cur.inBounds(rMax, cMax)) return false
+                if (cur !in grid) return false
                 if (at(cur) != letter) return false
             }
             return true
         }
 
         val directions =
-            (-1..1).flatMap { a -> (-1..1).map { b -> Dir(a, b) } } - Dir(0, 0)
+            (-1..1).flatMap { a -> (-1..1).map { b -> Vec2(a, b) } } - Vec2(0, 0)
 
         var count = 0
-        for (row in 0..cMax) {
-            for (col in 0..rMax) {
-                val p = Point(row, col)
-                if (at(p) == 'X') count += directions.count { test(p, it) }
-            }
+        for (p in grid) {
+            if (at(p) == 'X') count += directions.count { test(p, it) }
         }
 
         return count
@@ -46,22 +40,21 @@ object Day4 : Day {
 
     override fun part2(input: List<String>): Int {
 
-        fun at(p: Point) = input[p.row][p.col]
+        fun at(p: Point2) = input[p.x][p.y]
 
-        val cMax = input.lastIndex
-        val rMax = input.first().lastIndex
+        val grid = input.grid2()
 
         val directions = listOf(
-            Dir(-1, -1) to Dir(1, 1),
-            Dir(-1, 1) to Dir(1, -1)
+            Vec2(-1, -1) to Vec2(1, 1),
+            Vec2(-1, 1) to Vec2(1, -1)
         )
 
-        fun test(p: Point): Boolean {
+        fun test(p: Point2): Boolean {
             for ((d1, d2) in directions) {
                 val p1 = p + d1
                 val p2 = p + d2
 
-                if (!p1.inBounds(rMax, cMax) || !p2.inBounds(rMax, cMax))
+                if (p1 !in grid || p2 !in grid)
                     return false
 
                 val ch1 = at(p1)
@@ -76,11 +69,8 @@ object Day4 : Day {
         }
 
         var count = 0
-        for (row in 0..cMax) {
-            for (col in 0..rMax) {
-                val p = Point(row, col)
-                if (at(p) == 'A' && test(p)) count++
-            }
+        for (p in grid) {
+            if (at(p) == 'A' && test(p)) count++
         }
 
         return count
