@@ -4,6 +4,7 @@ import java.math.BigInteger
 import java.security.MessageDigest
 import kotlin.io.path.Path
 import kotlin.io.path.readText
+import kotlin.math.pow
 
 /**
  * Reads lines from the given input txt file.
@@ -26,3 +27,5 @@ fun <T> Sequence<T>.cycle() =
     sequence {
         while (true) yieldAll(this@cycle)
     }
+
+infix fun Int.pow(other: Int) = toDouble().pow(other).toInt()
