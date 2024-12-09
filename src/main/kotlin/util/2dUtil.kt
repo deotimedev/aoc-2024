@@ -6,6 +6,9 @@ data class Vec2(val x: Int, val y: Int)
 data class Point2(val x: Int, val y: Int) {
     operator fun plus(v: Vec2) =
         Point2(x + v.x, y + v.y)
+
+    fun displacement(other: Point2) =
+        Vec2(x - other.x, y - other.y)
 }
 data class Grid2(val x: Int, val y: Int) : Sequence<Point2> {
     init {
