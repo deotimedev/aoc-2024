@@ -2,7 +2,15 @@ package util
 
 // Utilities for working with 2d grid spaces
 
-data class Vec2(val x: Int, val y: Int)
+data class Vec2(val x: Int, val y: Int) {
+    companion object {
+        val Up = Vec2(0, 1)
+        val Down = Vec2(0, -1)
+        val Left = Vec2(-1, 0)
+        val Right = Vec2(1, 0)
+        val UDLR = listOf(Up, Down, Left, Right)
+    }
+}
 data class Point2(val x: Int, val y: Int) {
     operator fun plus(v: Vec2) =
         Point2(x + v.x, y + v.y)
@@ -35,4 +43,7 @@ fun List<String>.grid2(): Grid2 {
 }
 
 fun List<String>.at(p: Point2) =
+    this[lastIndex - p.y][p.x]
+
+fun <T> List<List<T>>.at(p: Point2) =
     this[lastIndex - p.y][p.x]
