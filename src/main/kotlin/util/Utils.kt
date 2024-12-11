@@ -32,3 +32,6 @@ infix fun Int.pow(other: Int) = toDouble().pow(other).toInt()
 
 fun <K, V> Map<K, V>.inverted() =
     entries.groupBy({ it.value }, { it.key })
+
+fun String.splitAt(index: Int) =
+    substring(0, index) to substring(index, length)
