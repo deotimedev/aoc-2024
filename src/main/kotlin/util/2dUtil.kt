@@ -1,16 +1,28 @@
 package util
 
+import java.util.BitSet
+
 // Utilities for working with 2d grid spaces
 
 data class Vec2(val x: Int, val y: Int) {
+
+    operator fun plus(other: Vec2) = Vec2(x + other.x, y + other.y)
+
     companion object {
         val Up = Vec2(0, 1)
         val Down = Vec2(0, -1)
         val Left = Vec2(-1, 0)
         val Right = Vec2(1, 0)
-        val UDLR = listOf(Up, Down, Left, Right)
+        val UD = listOf(Up, Down)
+        val LR = listOf(Left, Right)
+        val UDLR = UD + LR
+        val Corners =
+            listOf(Up, Left, Down, Right, Up)
+                .zipWithNext()
+                .map { (a, b) -> listOf(a, b, a + b) }
     }
 }
+
 data class Point2(val x: Int, val y: Int) {
     operator fun plus(v: Vec2) =
         Point2(x + v.x, y + v.y)
@@ -47,3 +59,9 @@ fun List<String>.at(p: Point2) =
 
 fun <T> List<List<T>>.at(p: Point2) =
     this[lastIndex - p.y][p.x]
+
+fun List<BitSet>.at(p: Point2) =
+    this[lastIndex - p.y][p.x]
+
+fun List<BitSet>.setAt(p: Point2, value: Boolean = true) =
+    this[lastIndex - p.y].set(p.x, value)

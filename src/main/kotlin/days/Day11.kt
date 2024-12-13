@@ -1,7 +1,6 @@
 package days
 
 import util.splitAt
-import kotlin.math.log10
 
 // this one was devious
 object Day11 : Day {
