@@ -8,6 +8,7 @@ data class Vec2(val x: Int, val y: Int) {
 
     operator fun plus(other: Vec2) = Vec2(x + other.x, y + other.y)
 
+    fun toPoint() = Point2(x, y)
     companion object {
         val Up = Vec2(0, 1)
         val Down = Vec2(0, -1)
