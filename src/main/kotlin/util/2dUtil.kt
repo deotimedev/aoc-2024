@@ -9,6 +9,7 @@ data class Vec2(val x: Int, val y: Int) {
     operator fun plus(other: Vec2) = Vec2(x + other.x, y + other.y)
 
     fun toPoint() = Point2(x, y)
+
     companion object {
         val Up = Vec2(0, 1)
         val Down = Vec2(0, -1)
@@ -31,6 +32,7 @@ data class Point2(val x: Int, val y: Int) {
     fun displacement(other: Point2) =
         Vec2(x - other.x, y - other.y)
 }
+
 data class Grid2(val x: Int, val y: Int) : Sequence<Point2> {
     init {
         require(x > 0 && y > 0) { "Grid is empty" }
@@ -46,6 +48,25 @@ data class Grid2(val x: Int, val y: Int) : Sequence<Point2> {
 
     operator fun contains(p: Point2) =
         p.x >= 0 && p.y >= 0 && p.x < x && p.y < y
+
+    fun toBitMatrix() = BitMatrix(this)
+}
+
+@JvmInline
+value class BitMatrix(val matrix: List<BitSet>) {
+    constructor(grid: Grid2) : this(List(grid.y) { BitSet(grid.x) })
+
+    operator fun get(p: Point2) =
+        matrix[matrix.lastIndex - p.y][p.x]
+
+    operator fun set(p: Point2, value: Boolean) =
+        matrix[matrix.lastIndex - p.y].set(p.x, value)
+
+    fun getAndSet(p: Point2, value: Boolean = true): Boolean {
+        val old = get(p)
+        this[p] = value
+        return old
+    }
 }
 
 fun List<String>.grid2(): Grid2 {
@@ -60,9 +81,3 @@ fun List<String>.at(p: Point2) =
 
 fun <T> List<List<T>>.at(p: Point2) =
     this[lastIndex - p.y][p.x]
-
-fun List<BitSet>.at(p: Point2) =
-    this[lastIndex - p.y][p.x]
-
-fun List<BitSet>.setAt(p: Point2, value: Boolean = true) =
-    this[lastIndex - p.y].set(p.x, value)

@@ -15,16 +15,15 @@ object Day12 : Day {
         data class Shape(val area: Int, val perim: Int)
 
         val grid = input.grid2()
-        val visited = input.map { BitSet(it.length) }
+        val visited = grid.toBitMatrix()
         fun shape(point: Point2): Shape {
-            if (visited.at(point)) return Shape(0, 0)
-            visited.setAt(point)
+            if (visited.getAndSet(point)) return Shape(0, 0)
             val group = input.at(point)
             val (next, edges) = Vec2.UDLR
                 .map { point + it }
                 .partition { it in grid && input.at(it) == group }
             return next
-                .filter { !visited.at(it) }
+                .filter { !visited[it] }
                 .fold(Shape(1, edges.size)) { acc, p ->
                     val shape = shape(p)
                     Shape(acc.area + shape.area, acc.perim + shape.perim)
@@ -32,7 +31,7 @@ object Day12 : Day {
         }
 
         return grid.sumOf { p ->
-            if (visited.at(p)) return@sumOf 0
+            if (visited[p]) return@sumOf 0
             val shape = shape(p)
             (shape.area * shape.perim)
         }
@@ -42,10 +41,9 @@ object Day12 : Day {
         data class Shape(val area: Int, val sides: Int)
 
         val grid = input.grid2()
-        val visited = input.map { BitSet(it.length) }
+        val visited = grid.toBitMatrix()
         fun shape(point: Point2): Shape {
-            if (visited.at(point)) return Shape(0, 0)
-            visited.setAt(point)
+            if (visited.getAndSet(point)) return Shape(0, 0)
             val group = input.at(point)
             val next = Vec2.UDLR
                 .map { point + it }
@@ -60,7 +58,7 @@ object Day12 : Day {
                     (a == group && b == group && c != group) // CHECK IF INWARD EDGE
                 }
             return next
-                .filter { !visited.at(it) }
+                .filter { !visited[it] }
                 .fold(Shape(1, sides)) { acc, p ->
                     val shape = shape(p)
                     Shape(acc.area + shape.area, acc.sides + shape.sides)
@@ -68,7 +66,7 @@ object Day12 : Day {
         }
 
         return grid.sumOf { p ->
-            if (visited.at(p)) return@sumOf 0
+            if (visited[p]) return@sumOf 0
             val shape = shape(p)
             (shape.area * shape.sides)
         }
