@@ -4,8 +4,6 @@ import util.Point2
 import util.Vec2
 import util.at
 import util.grid2
-import util.setAt
-import java.util.BitSet
 
 object Day12 : Day {
     override val name = "Garden Groups"

@@ -1,5 +1,6 @@
 package util
 
+import util.Point2
 import java.util.BitSet
 
 // Utilities for working with 2d grid spaces
@@ -11,8 +12,8 @@ data class Vec2(val x: Int, val y: Int) {
     fun toPoint() = Point2(x, y)
 
     companion object {
-        val Up = Vec2(0, 1)
-        val Down = Vec2(0, -1)
+        val Up = Vec2(0, -1)
+        val Down = Vec2(0, 1)
         val Left = Vec2(-1, 0)
         val Right = Vec2(1, 0)
         val UD = listOf(Up, Down)
@@ -31,6 +32,8 @@ data class Point2(val x: Int, val y: Int) {
 
     fun displacement(other: Point2) =
         Vec2(x - other.x, y - other.y)
+
+
 }
 
 data class Grid2(val x: Int, val y: Int) : Sequence<Point2> {
@@ -50,6 +53,9 @@ data class Grid2(val x: Int, val y: Int) : Sequence<Point2> {
         p.x >= 0 && p.y >= 0 && p.x < x && p.y < y
 
     fun toBitMatrix() = BitMatrix(this)
+
+    fun Point2.wrappingAdd(v: Vec2) =
+        Point2(x.wrappingAdd(v.x, this@Grid2.x), y.wrappingAdd(v.y, this@Grid2.y))
 }
 
 @JvmInline
@@ -57,10 +63,10 @@ value class BitMatrix(val matrix: List<BitSet>) {
     constructor(grid: Grid2) : this(List(grid.y) { BitSet(grid.x) })
 
     operator fun get(p: Point2) =
-        matrix[matrix.lastIndex - p.y][p.x]
+        matrix[p.y][p.x]
 
     operator fun set(p: Point2, value: Boolean) =
-        matrix[matrix.lastIndex - p.y].set(p.x, value)
+        matrix[p.y].set(p.x, value)
 
     fun getAndSet(p: Point2, value: Boolean = true): Boolean {
         val old = get(p)
@@ -77,7 +83,7 @@ fun List<String>.grid2(): Grid2 {
 }
 
 fun List<String>.at(p: Point2) =
-    this[lastIndex - p.y][p.x]
+    this[p.y][p.x]
 
 fun <T> List<List<T>>.at(p: Point2) =
-    this[lastIndex - p.y][p.x]
+    this[p.y][p.x]

@@ -21,7 +21,7 @@ fun String.md5() = BigInteger(1, MessageDigest.getInstance("MD5").digest(toByteA
 /**
  * The cleaner shorthand for printing output.
  */
-fun <T> T.println() = also { println(this) }
+fun <T> T.printLnThis() = also { println(this) }
 
 fun <T> Sequence<T>.cycle() =
     sequence {
@@ -35,3 +35,12 @@ fun <K, V> Map<K, V>.inverted() =
 
 fun String.splitAt(index: Int) =
     substring(0, index) to substring(index, length)
+
+fun <T> List<T>.printAll() = apply { forEach(::println) }
+
+fun Int.wrappingAdd(other: Int, base: Int) =
+    when {
+        this + other == 0 -> 0
+        this + other > 0 -> (this + other) % base
+        else -> base + ((this + other) % base)
+    }

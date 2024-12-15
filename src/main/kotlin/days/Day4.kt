@@ -3,7 +3,6 @@ package days
 import util.Point2
 import util.Vec2
 import util.grid2
-import util.println
 
 object Day4 : Day {
     override val name = "Ceres Search"
@@ -13,7 +12,6 @@ object Day4 : Day {
 
         val grid = input.grid2()
         val cMax = input.lastIndex
-        println("${grid.x} ${cMax}")
         fun at(p: Point2) = input[p.x][p.y]
 
 
