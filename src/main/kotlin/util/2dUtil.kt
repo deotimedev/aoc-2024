@@ -23,6 +23,14 @@ data class Vec2(val x: Int, val y: Int) {
             listOf(Up, Left, Down, Right, Up)
                 .zipWithNext()
                 .map { (a, b) -> listOf(a, b, a + b) }
+
+        operator fun invoke(dir: Char) = when (dir) {
+            '^' -> Up
+            '>' -> Right
+            'v' -> Down
+            '<' -> Left
+            else -> error("'$dir' is not a direction.")
+        }
     }
 }
 
@@ -53,6 +61,11 @@ data class Grid2(val x: Int, val y: Int) : Sequence<Point2> {
         p.x >= 0 && p.y >= 0 && p.x < x && p.y < y
 
     fun toBitMatrix() = BitMatrix(this)
+    fun toBitMatrix(pred: (Point2) -> Boolean) = BitMatrix(this).apply {
+        for (p in this@Grid2) {
+            if (pred(p)) set(p, true)
+        }
+    }
 
     fun Point2.wrappingAdd(v: Vec2) =
         Point2(x.wrappingAdd(v.x, this@Grid2.x), y.wrappingAdd(v.y, this@Grid2.y))
