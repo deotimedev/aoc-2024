@@ -8,6 +8,7 @@ import java.util.BitSet
 data class Vec2(val x: Int, val y: Int) {
 
     operator fun plus(other: Vec2) = Vec2(x + other.x, y + other.y)
+    operator fun times(factor: Int) = Vec2(x * factor, y * factor)
 
     fun toPoint() = Point2(x, y)
 
@@ -23,6 +24,15 @@ data class Vec2(val x: Int, val y: Int) {
             listOf(Up, Left, Down, Right, Up)
                 .zipWithNext()
                 .map { (a, b) -> listOf(a, b, a + b) }
+
+        val Vec2.dirCode get() =
+            when (this) {
+                Up -> 0
+                Left -> 1
+                Down -> 2
+                Right -> 3
+                else -> throw kotlin.IllegalArgumentException("Not a direction: $this")
+            }
 
         operator fun invoke(dir: Char) = when (dir) {
             '^' -> Up
@@ -78,6 +88,7 @@ value class BitMatrix(val matrix: List<BitSet>) {
     operator fun get(p: Point2) =
         matrix[p.y][p.x]
 
+    fun set(p: Point2) = set(p, true)
     operator fun set(p: Point2, value: Boolean) =
         matrix[p.y].set(p.x, value)
 
@@ -86,6 +97,10 @@ value class BitMatrix(val matrix: List<BitSet>) {
         this[p] = value
         return old
     }
+
+    fun setAll(ps: Iterable<Point2>) = ps.forEach(::set)
+
+    fun count() = matrix.sumOf { it.cardinality() }
 }
 
 fun List<String>.grid2(): Grid2 {
