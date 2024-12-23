@@ -29,6 +29,7 @@ fun <T> Sequence<T>.cycle() =
     }
 
 infix fun Int.pow(other: Int) = toDouble().pow(other).toInt()
+infix fun Long.pow(other: Long) = toDouble().pow(other.toDouble()).toLong()
 
 fun <K, V> Map<K, V>.inverted() =
     entries.groupBy({ it.value }, { it.key })

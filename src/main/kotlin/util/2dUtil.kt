@@ -50,8 +50,6 @@ data class Point2(val x: Int, val y: Int) {
 
     fun displacement(other: Point2) =
         Vec2(x - other.x, y - other.y)
-
-
 }
 
 data class Grid2(val x: Int, val y: Int) : Sequence<Point2> {

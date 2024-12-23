@@ -28,7 +28,8 @@ fun main() {
     }
 
     print("Enter day to run: ")
-    val day = readln()
+//    val day = readln()
+    val day = "17"
     if (day.equals("all", ignoreCase = true)) repeat(25) { run(it + 1) }
     else run(day.toIntOrNull() ?: return System.err.println("Invalid day."))
 }
